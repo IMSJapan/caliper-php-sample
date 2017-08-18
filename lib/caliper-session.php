@@ -12,7 +12,7 @@ use IMSGlobal\Caliper\entities;
 /* 設定項目。任意の情報に書き換えること */
 
 $endpoint = 'http://caliper.imsglobal.org/'; // 送信先URL
-$apikey   = 'fx1jr5mv';  // APIキー
+$apikey   = 'apikey';  // APIキー
 $sensorId = 'sensorId';
 $clientId = 'clientId';
 $appId = 'https://example.com/app/123456789';
@@ -87,23 +87,23 @@ function sendSessionLoggedOut($user_name, $login_time)
     $now = new DateTime();
     $duration = $now->diff($login_time);
 
-    $actor = (new entities\agent\Person('https://example.com/uesrs/' . $user_name))
-        ->setName($user_name);
+    // BEGIN: 送信用イベントの構築
+    // この部分でLoggedOutイベントの構築を行う。
+    // ログイン時とは異なり、session に endedAtTime, duration が必要となる
 
-    $session = (new entities\session\Session('https://example.com/session/12345'))
-        ->setActor($actor)
-        ->setDateCreated($login_time)
-        ->setDateModified($login_time)
-        ->setStartedAtTime($login_time)
-        ->setEndedAtTime($now)
-        ->setDuration(getDurationString($duration));
 
-    $event = (new events\SessionEvent())
-        ->setActor($actor)
-        ->setAction(new actions\Action(actions\Action::LOGGED_OUT))
-        ->setObject($app)
-        ->setTarget($session)
-        ->setEventTime($now);
+
+
+
+
+
+
+
+
+
+
+    // END: 送信用イベントの構築
+
 
     // イベント送信
     try {
@@ -111,7 +111,7 @@ function sendSessionLoggedOut($user_name, $login_time)
         $sensor->send($sensor, $event);
         return true;
 
-    } catch (\RuntimeException $exception) {
+    } catch (\Exception $exception) {
 
         echo 'Error sending event: ' . $exception->getMessage() . PHP_EOL;
         return false;
