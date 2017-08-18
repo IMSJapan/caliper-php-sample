@@ -1,0 +1,5 @@
+{
+    "require": {
+        "imsglobal/caliper": "^1.0"
+    }
+}
